@@ -1,18 +1,9 @@
 package com.example.practice.controller;
 
-import com.example.practice.domain.Posts;
-import com.example.practice.domain.PostsRepository;
-import com.example.practice.service.PostsService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-@Controller
-@AllArgsConstructor
 public class WebController {
 
+    /*
     @Autowired
     private PostsRepository postsRepository;
 

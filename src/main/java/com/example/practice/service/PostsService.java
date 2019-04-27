@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
-
 @AllArgsConstructor
 @Service
 public class PostsService {

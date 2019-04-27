@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing  //JPA Auditing 활성화
 @SpringBootApplication
-@MapperScan("com.")
 public class PracticeApplication {
 
     public static void main(String[] args) {

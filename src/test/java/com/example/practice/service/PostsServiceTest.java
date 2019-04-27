@@ -26,6 +26,7 @@ public class PostsServiceTest {
         postsRepository.deleteAll();
     }
 
+    /*
     @Test
     public void dto_save(){
 
@@ -46,5 +47,6 @@ public class PostsServiceTest {
         assertThat(posts.getWriter()).isEqualTo(dto.getWriter());
 
     }
+    */
 
 }

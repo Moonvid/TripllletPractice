@@ -32,7 +32,7 @@ public class PostsRepositoryTest {
         postsRepository.deleteAll();
 
     }
-
+    /*
     @Test
     public void load_list() {
 
@@ -72,6 +72,7 @@ public class PostsRepositoryTest {
         assertTrue(posts.getCreatedDate().isAfter(now));
         assertTrue(posts.getModifiedDate().isAfter(now));
     }
+    */
 
 
 }

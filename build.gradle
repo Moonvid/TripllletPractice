@@ -1,3 +1,9 @@
+buildscript {
+    dependencies{
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE"
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.1.4.RELEASE'
     id 'java'
@@ -19,13 +25,6 @@ repositories {
     mavenCentral()
 }
 
-
-
-buildscript {
-    dependencies{
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE"
-    }
-}
 
 //Spring Boot Overriding
 ext['hibernate.version'] = '5.2.11.Final'

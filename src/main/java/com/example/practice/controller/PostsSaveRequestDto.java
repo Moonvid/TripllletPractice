@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PostsSaveRequestDto {
 
+    /*
     private String title;
     private String content;
     private String writer;
@@ -30,6 +31,7 @@ public class PostsSaveRequestDto {
                 .writer(writer)
                 .build();
     }
+    */
 
 
 }

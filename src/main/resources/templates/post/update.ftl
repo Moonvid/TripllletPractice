@@ -8,6 +8,7 @@
 
     <!-- 부트스트랩 js, jquery 추가-->
     <link rel="stylesheet" href="//unpkg.com/bootstrap@4/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/lib/common.css">
 
     <style>
         .left{
@@ -36,8 +37,20 @@
 
 <body>
 
-<h1 align="center">스프링부트로 만든 웹 게시판</h1>
-<br/><br/>
+    <hr/>
+    <div>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/post/list">Board</a>
+            </li>
+        </ul>
+    </div>
+    <hr/>
+
+    <br/><br/>
 
     <div class="container">
         <!-- 게시물 확인 -->
@@ -46,7 +59,7 @@
 
         <div class="row">
             <div class="row">
-                <form method="post" action="/update/${posts.id}">
+                <form method="post" action="/post/update/${posts.id}">
                 <table class="table table-horizontal table-bordered">
                     <tbody id="tbody">
                         <tr>
@@ -67,7 +80,7 @@
                                 <button type="submit" class="btn btn-primary">수정완료</button>
                             </div>&nbsp;
                             <div class="button">
-                                <button type="button" class="btn btn-primary" onclick="location.href='/view/${posts.id}'">수정취소</button>
+                                <button type="button" class="btn btn-primary" onclick="location.href='/post/view/${posts.id}'">수정취소</button>
                             </div>
                         </div>
                     </div>

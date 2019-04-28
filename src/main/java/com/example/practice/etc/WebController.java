@@ -1,4 +1,4 @@
-package com.example.practice.controller;
+package com.example.practice.etc;
 
 
 public class WebController {

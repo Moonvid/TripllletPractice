@@ -5,7 +5,11 @@ import com.example.practice.domain.PostsRepository;
 import com.example.practice.service.PostsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,85 +27,85 @@ public class WebRestController {
     @Autowired
     private PostsService postsService;
 
-    /*
-    @PostMapping("/posts")
-    public Long savePosts(@RequestBody PostsSaveRequestDto dto){
+    // 리스트
+    @GetMapping("/post/list")
+    public ModelAndView list(ModelAndView mav, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable){
 
-        //postsRepository.save(dto.toEntity());
-        return postsService.save(dto);
+        Page<Posts> postsPage = postsRepository.findAll(pageable);
+        System.out.println(postsPage);
+        mav.addObject("postsPage", postsPage);
 
-    }
-    */
-
-    // 글쓰기
-    @PostMapping("/insert")
-    public ModelAndView insert(Posts p){
-
-        Posts posts = postsRepository.save(p);
-
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("posts",postsRepository.findAll());
-        mav.setViewName("main");
+        mav.setViewName("post/list");
+        //mav.addObject("posts", postsRepository.findAll());
 
         return mav;
     }
 
     // 글쓰기 폼 이동
-    @GetMapping("/insertForm")
-    public ModelAndView insertForm(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("insert");
+    @GetMapping("/post/insertForm")
+    public ModelAndView insertForm(ModelAndView mav){
+        mav.setViewName("post/insert");
+
+        return mav;
+    }
+
+    // 글쓰기
+    @PostMapping("/post/insert")
+    public ModelAndView insert(Posts p, ModelAndView mav){
+
+        System.out.println(p.getCreatedDate());
+        System.out.println(p.getModifiedDate());
+
+        Posts posts = postsRepository.save(p);
+
+        mav.addObject("posts",postsRepository.findAll());
+        mav.setViewName("redirect:/post/list");
 
         return mav;
     }
 
     // 글 보기
-    @GetMapping("/view/{id}")
-    public ModelAndView view(@PathVariable("id") Long id){
-        ModelAndView mav = new ModelAndView();
+    @GetMapping("/post/view/{id}")
+    public ModelAndView view(@PathVariable("id") Long id, ModelAndView mav){
 
         Posts posts = postsRepository.getOne(id);
 
         mav.addObject("posts",posts);
-        mav.setViewName("view");
+        mav.setViewName("post/view");
 
         return mav;
     }
 
 
     // 삭제
-    @GetMapping("/delete/{id}")
-    public ModelAndView delete(@PathVariable("id") Long id){
+    @GetMapping("/post/delete/{id}")
+    public ModelAndView delete(@PathVariable("id") Long id, ModelAndView mav){
 
         Posts posts = postsRepository.getOne(id);   // id 값으로 해당 row 불러온다.
         posts.setDeletedDate(new Date());                // 불러온 row의 컬럼 중 deletedDate의 값을 현재 시간으로 변경
         postsRepository.save(posts);                // 바뀐 정보를 다시 저장
 
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("/");
+        mav.setViewName("redirect:/post/list");
 
         return mav;
 
     }
 
     // 수정 폼 이동
-    @GetMapping("/updateForm/{id}")
-    public ModelAndView updateForm(@PathVariable("id") Long id){
+    @GetMapping("/post/updateForm/{id}")
+    public ModelAndView updateForm(@PathVariable("id") Long id, ModelAndView mav){
 
-        ModelAndView mav = new ModelAndView();
         Posts posts = postsRepository.getOne(id);
         mav.addObject("posts", posts);
-        mav.setViewName("update");
+        mav.setViewName("post/update");
 
         return mav;
 
     }
 
     // 업데이트
-    @PostMapping("/update/{id}")
-    public ModelAndView update(@RequestParam("id") Long id, Posts p){
-
-        ModelAndView mav = new ModelAndView();
+    @PostMapping("/post/update/{id}")
+    public ModelAndView update(@RequestParam("id") Long id, Posts p, ModelAndView mav){
 
         Posts posts = postsRepository.getOne(p.getId());
 
@@ -111,18 +115,18 @@ public class WebRestController {
 
         postsRepository.save(posts);
 
-        mav.setViewName("redirect:/view/{id}");
+        mav.setViewName("redirect:/post/view/{id}");
 
         return mav;
 
     }
 
     // 검색
-    @GetMapping("/search")
-    public ModelAndView search(@RequestParam("title") String title, ModelAndView mav){
+    @GetMapping("/post/search")
+    public ModelAndView search(@RequestParam(value="title", required = false) String title, ModelAndView mav){
 
         mav.addObject("list", postsService.searchPosts(title));
-        mav.setViewName("search");
+        mav.setViewName("/post/search");
 
         System.out.println(postsService.searchPosts(title));
 

@@ -8,6 +8,7 @@
 
     <!-- 부트스트랩 js, jquery 추가-->
     <link rel="stylesheet" href="//unpkg.com/bootstrap@4/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/lib/common.css">
 
     <style>
         .left{
@@ -36,8 +37,18 @@
 
 <body>
 
-<h1 align="center">스프링부트로 만든 웹 게시판</h1>
-<br/><br/>
+    <hr/>
+    <div>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/post/list">Board</a>
+            </li>
+        </ul>
+    </div>
+    <hr/>
 
     <div class="container">
         <!-- 게시물 확인 -->
@@ -65,13 +76,13 @@
             <div class="row">
             <div class="button-align">
                 <div class="button">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/updateForm/${posts.id}'">수정하기</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/post/updateForm/${posts.id}'">수정하기</button>
                 </div>&nbsp;
                 <div class="button">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/delete/${posts.id}'">삭제하기</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/post/delete/${posts.id}'">삭제하기</button>
                 </div>&nbsp;
                 <div class="button">
-                    <button type="button" class="btn btn-primary" onclick="location.href='/'">목록보기</button>
+                    <button type="button" class="btn btn-primary" onclick="location.href='/post/list'">목록보기</button>
                 </div>
             </div>
             </div>

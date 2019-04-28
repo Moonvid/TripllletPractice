@@ -9,6 +9,7 @@
 
     <!-- 부트스트랩 js, jquery 추가-->
     <link rel="stylesheet" href="//unpkg.com/bootstrap@4/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/lib/common.css">
 
     <style>
         .t-title{
@@ -32,12 +33,28 @@
 </head>
 
 <body>
-    <h1 align="center">스프링부트로 만든 웹 게시판</h1>
+    <hr/>
+    <div>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/post/list">Board</a>
+            </li>
+        </ul>
+    </div>
+    <hr/>
+
     <br/><br/>
 
     <div class="container">
+
+        <div align="center"><h1>검색 결과</h1></div>
+        <br/>
+
         <div class="col-md-12">
-            <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/insertForm'" >글 등록</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/post/insertForm'" >글 등록</button>
         </div>
 
         <br/>
@@ -45,7 +62,6 @@
 
         <!-- 목록 출력 영역 -->
         <#if list?has_content>
-        <div align="center"><h1>검색 결과</h1></div>
         <table class="table table-horizontal table-bordered">
             <thead class="thead-strong">
                 <tr>
@@ -57,7 +73,7 @@
             </thead>
             <tbody id="tbody">
                 <#list list as item>
-                <tr onclick="location.href='/view/${item.id}'" class="all">
+                <tr onclick="location.href='/post/view/${item.id}'" class="all">
                     <td>${item.id}</td>
                     <td>${item.title}</td>
                     <td>${item.writer}</td>
@@ -67,14 +83,17 @@
                 </#list>
             </tbody>
         </table>
-            <form action="/search">
+            <form action="/post/search">
                 <div class="row">
                     <div class="search-align">
                         <div class="input">
-                            <input type="text" name="search" id="search"/>
+                            <input type="text" name="title" id="title"/>
                         </div>&nbsp;
                         <div class="button">
                             <button type="submit" class="btn btn-primary">검색</button>
+                        </div>
+                        <div class="button">
+                            <button type="button" class="btn btn-primary" onclick="location.href='/post/list'">목록보기</button>
                         </div>
                     </div>
                 </div>
@@ -82,6 +101,9 @@
         <#else>
             <div>
                 <h4 class="all"> 검색된 게시글이 없습니다.</h4>
+            </div>
+            <div class="button">
+                <button type="button" class="btn btn-primary" onclick="location.href='/'">홈으로이동</button>
             </div>
         </#if>
     </div>

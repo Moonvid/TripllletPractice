@@ -8,6 +8,7 @@
 
     <!-- 부트스트랩 js, jquery 추가-->
     <link rel="stylesheet" href="//unpkg.com/bootstrap@4/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/lib/common.css">
 
     <style>
         .left{
@@ -36,8 +37,18 @@
 
 <body>
 
-<h1 align="center">스프링부트로 만든 웹 게시판</h1>
-<br/><br/>
+<hr/>
+<div>
+    <ul>
+        <li>
+            <a href="/">Home</a>
+        </li>
+        <li>
+            <a href="/post/list">Board</a>
+        </li>
+    </ul>
+</div>
+<hr/>
 
 <div class="container">
     <!-- 게시물 작성 -->
@@ -46,7 +57,7 @@
     <div class="container" id="main">
         <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
             <div class="panel panel-default content-main">
-                <form name="insert" method="post" action="/insert">
+                <form name="insert" method="post" action="/post/insert">
                     <div class="form-group">
                         <label for="writer">작성자</label>
                         <input type="text" class="form-control" id="writer" name="writer"/>
@@ -60,7 +71,7 @@
                         <textarea name="content" id="content" row="5" class="form-control" placeholder="내용을 입력하세요"></textarea>
                     </div>
                     <button type="submit" class="btn btn-success clearfix pull-right">작성하기</button>
-                    <button type="button" class="btn btn-success clearfix pull-right" onclick="location.href='/'">목록보기</button>
+                    <button type="button" class="btn btn-success clearfix pull-right" onclick="location.href='/post/list'">목록보기</button>
                     <div class="clearfix"/>
                 </form>
             </div>

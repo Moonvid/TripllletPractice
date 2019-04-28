@@ -1,8 +1,5 @@
-package com.example.practice.controller;
+package com.example.practice.etc;
 
-import com.example.practice.domain.BaseTimeEntity;
-import com.example.practice.domain.Posts;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

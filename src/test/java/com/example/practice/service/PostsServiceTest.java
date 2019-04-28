@@ -1,10 +1,7 @@
 package com.example.practice.service;
 
-import com.example.practice.controller.PostsSaveRequestDto;
-import com.example.practice.domain.Posts;
 import com.example.practice.domain.PostsRepository;
 import org.junit.After;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

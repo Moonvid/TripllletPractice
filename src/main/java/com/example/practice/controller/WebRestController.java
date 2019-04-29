@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-public class WebRestController {
+public class WebRestController{
 
     @Autowired
     private PostsRepository postsRepository;
@@ -52,13 +54,26 @@ public class WebRestController {
 
     // 검색
     @GetMapping("/post/list")
-    public ModelAndView search(@RequestParam(value="keyword", required = false) String keyword, ModelAndView mav){
+    public ModelAndView search(@RequestParam(value="keyword", required = false) String keyword,
+                               @RequestParam(value="page", defaultValue = "0") Integer page,
+                               @RequestParam(value="row", defaultValue = "10") Integer row,
+                               ModelAndView mav){
 
-        System.out.println("keyword = " + keyword);
 
-        List<Posts> postsList = postsService.searchPosts(keyword);
+        List<Posts> postsList = postsService.searchPosts(keyword);  // 검색어 유무에 따른 게시글 리스트를 받아옴
 
-        System.out.println(postsList);
+        // 페이징에 쓰기위한 Map params 생성
+        Map<String, Object> params = new HashMap<String, Object>(){{
+           put("keyword", keyword);
+           put("sort", "created_datetime");
+           put("order", 1);
+           put("offset", page * row);
+           put("count", row);
+        }};
+
+        int totalCount = postsService.count(params);
+
+        setPaginationData(mav,totalCount,page, row);
 
         mav.addObject("postsList", postsList);
         mav.setViewName("/post/list");
@@ -66,6 +81,17 @@ public class WebRestController {
         return mav;
     }
 
+    // 페이징 참고
+    protected void setPaginationData(ModelAndView mav, long totalCount, int pageNumber, int pageSize) {
+
+        Map<String, Object> paginationData = new HashMap<>();
+        paginationData.put("pagesAvailable", (int) Math.ceil((double) totalCount / pageSize));
+        paginationData.put("pageNumber", pageNumber);
+        paginationData.put("pageSize", pageSize);
+
+        mav.addObject("paginationData", paginationData);
+        mav.addObject("totalCount", totalCount);
+    }
 
 
     // 글쓰기 폼 이동

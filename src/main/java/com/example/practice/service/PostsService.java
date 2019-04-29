@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
@@ -28,6 +29,17 @@ public class PostsService {
         return results;
 
     }
+
+    public int count(Map<String, Object> params){
+        //searchDao = sqlSessionTemplate.getMapper(SearchDao.class);
+
+        //int resultCnt = searchDao.count(params);
+
+        return 0;
+
+    }
+
+
 
 
 

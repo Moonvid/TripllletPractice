@@ -5,11 +5,13 @@
 
     <!-- 메인 페이지 게시글 검색 쿼리 -->
 
-    <select id="searchPosts" resultType="com.example.practice.domain.Posts">
+    <select id="searchPosts" resultType="com.example.practice.domain.Posts" parameterType="String">
         select id, content, title, writer, created_date as createdDate, modified_date as modifiedDate, deleted_date as deletedDate
         from posts
-        where title like CONCAT('%',#{keyword},'%')
-        order by created_date desc, id desc
+        <if test="value != null and value!=''">
+            where title like CONCAT('%',#{value},'%')
+        </if>
+        order by id desc, created_date desc
     </select>
 
 

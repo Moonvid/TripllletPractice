@@ -1,7 +1,6 @@
 package com.example.practice.service;
 
 import com.example.practice.domain.Posts;
-import com.example.practice.domain.PostsRepository;
 import com.example.practice.domain.SearchDao;
 import lombok.AllArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -15,19 +14,16 @@ import java.util.List;
 public class PostsService {
 
     @Autowired
-    private PostsRepository postsRepository;
-
-    @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
     private SearchDao searchDao;
 
     // 메인 페이지 검색
-    public List searchPosts(String title){
+    public List searchPosts(String keyword){
 
         searchDao = sqlSessionTemplate.getMapper(SearchDao.class);
 
-        List<Posts> results = searchDao.searchPosts(title);
+        List<Posts> results = searchDao.searchPosts(keyword);
 
         return results;
 

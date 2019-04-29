@@ -5,17 +5,11 @@ import com.example.practice.domain.PostsRepository;
 import com.example.practice.service.PostsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
-
-import static java.time.LocalDateTime.now;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -27,7 +21,8 @@ public class WebRestController {
     @Autowired
     private PostsService postsService;
 
-    // 리스트
+    // Pageable을 사용한 list
+    /*
     @GetMapping("/post/list")
     public ModelAndView list(ModelAndView mav, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable){
 
@@ -40,6 +35,38 @@ public class WebRestController {
 
         return mav;
     }
+    */
+
+//    // 일반 리스트
+//    @GetMapping("/post/list")
+//    public ModelAndView list(ModelAndView mav){
+//
+//        List<Posts> postsList = postsRepository.findAll();
+//        mav.addObject("postsList", postsList);
+//
+//        mav.setViewName("post/list");
+//        //mav.addObject("posts", postsRepository.findAll());
+//
+//        return mav;
+//    }
+
+    // 검색
+    @GetMapping("/post/list")
+    public ModelAndView search(@RequestParam(value="keyword", required = false) String keyword, ModelAndView mav){
+
+        System.out.println("keyword = " + keyword);
+
+        List<Posts> postsList = postsService.searchPosts(keyword);
+
+        System.out.println(postsList);
+
+        mav.addObject("postsList", postsList);
+        mav.setViewName("/post/list");
+
+        return mav;
+    }
+
+
 
     // 글쓰기 폼 이동
     @GetMapping("/post/insertForm")
@@ -119,18 +146,6 @@ public class WebRestController {
 
         return mav;
 
-    }
-
-    // 검색
-    @GetMapping("/post/search")
-    public ModelAndView search(@RequestParam(value="title", required = false) String title, ModelAndView mav){
-
-        mav.addObject("list", postsService.searchPosts(title));
-        mav.setViewName("/post/search");
-
-        System.out.println(postsService.searchPosts(title));
-
-        return mav;
     }
 
 

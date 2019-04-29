@@ -34,7 +34,7 @@
 
     <hr/>
     <div>
-        <ul>
+        <ul class="navi">
             <li>
                 <a href="/">Home</a>
             </li>
@@ -59,7 +59,7 @@
     <br/>
 
     <!-- 목록 출력 영역 -->
-    <#if postsPage.content?has_content>
+    <#if postsList?has_content>
         <table class="table table-horizontal table-bordered">
             <thead class="thead-strong">
             <tr>
@@ -70,34 +70,22 @@
             </tr>
             </thead>
             <tbody id="tbody">
-                <#list postsPage.content as item>
+                <#list postsList as item>
                     <tr onclick="location.href='/post/view/${item.id}'" class="all">
                         <td>${item.id}</td>
                         <td>${item.title}</td>
                         <td>${item.writer}</td>
-                        <td>${item.modifiedDate}</td>
+                        <td>${item.modifiedDate?string['YYYY-MM-dd']}</td>
                     </tr>
                 </#list>
             </tbody>
         </table>
-
-        <#if postsPage??>
-            <#assign data = postsPage.content />
-        </#if>
-
-        <#macro bind postsPage>
-            <#assign data = postsPage />
-        </#macro>
-
-
-
-
-
-        <form action="/post/search">
+        <br>
+        <form action="/post/list">
             <div class="row">
                 <div class="search-align">
                     <div class="input">
-                        <input type="text" name="title" id="title"/>
+                        <input type="text" name="keyword" id="keyword"/>
                     </div>&nbsp;
                     <div class="button">
                         <button type="submit" class="btn btn-primary btn-success">검색</button>

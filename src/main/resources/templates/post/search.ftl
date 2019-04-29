@@ -35,7 +35,7 @@
 <body>
     <hr/>
     <div>
-        <ul>
+        <ul class="navi">
             <li>
                 <a href="/">Home</a>
             </li>

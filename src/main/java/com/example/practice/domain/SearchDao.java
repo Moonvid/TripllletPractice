@@ -7,7 +7,7 @@ import java.util.List;
 @Mapper
 public interface SearchDao {
 
-    List<Posts> searchPosts(String title);
+    List<Posts> searchPosts(String keyword);
 
 
 }

@@ -54,7 +54,7 @@ public class WebRestController{
 
     // 검색
     @GetMapping("/post/list")
-    public ModelAndView search(@RequestParam(value="keyword", required = false) String keyword,
+    public ModelAndView search(@RequestParam(value="keyword", required = false, defaultValue = "") String keyword,
                                @RequestParam(value="page", defaultValue = "0") Integer page,
                                @RequestParam(value="row", defaultValue = "10") Integer row,
                                ModelAndView mav){
@@ -74,7 +74,7 @@ public class WebRestController{
 
 
 
-        int totalCount = postsService.count(params);
+        int totalCount = postsService.count(params);                // keyword로 검색 된 전체 데이터 개수
         System.out.println("totalCount = " + totalCount);
 
         setPaginationData(mav,totalCount,page, row);
@@ -88,6 +88,8 @@ public class WebRestController{
 
         return mav;
     }
+
+
 
     // 글쓰기 폼 이동
     @GetMapping("/post/insertForm")
@@ -174,9 +176,9 @@ public class WebRestController{
     protected void setPaginationData(ModelAndView mav, long totalCount, int pageNumber, int pageSize) {
 
         Map<String, Object> paginationData = new HashMap<>();
-        paginationData.put("pagesAvailable", (int) Math.ceil((double) totalCount / pageSize));
-        paginationData.put("pageNumber", pageNumber);
-        paginationData.put("pageSize", pageSize);
+        paginationData.put("pagesAvailable", (int) Math.ceil((double) totalCount / pageSize)); // 전체 데이터개수를 한 페이지 당 보여줄 데이터 개수로 나누어 사용할 페이지 수를 구한다.
+        paginationData.put("pageNumber", pageNumber);                                          // 시작되는 페이지 넘버 값을 설정. default는 0부터
+        paginationData.put("pageSize", pageSize);                                              // 한 페이지당 보여줄 데이터 개수, 10개씩 보여주는걸로
 
         mav.addObject("paginationData", paginationData);
         mav.addObject("totalCount", totalCount);

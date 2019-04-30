@@ -96,7 +96,7 @@
             <h4 class="all"> 등록된 게시글이 없습니다.</h4>
         </div>
     </#if>
-    <form action="/post/list">
+    <form action="/post/list" id="frmSearch">
         <div class="row">
             <div class="search-align">
                 <div class="input">
@@ -158,23 +158,39 @@
 
 
 <script>
+
+    $(document).ready(function () {
+
+        $("#frmSearch").submit(function () {
+
+            $("#page").val(0);
+
+        });
+
+    });
+
+
     function paging(pageValue){
-        if(window.location.search !=""){                            // 해당 페이지의 파라미터 값이 있을 때
+        if(window.location.search !=""){                            // 해당 페이지의 파라미터 값이 있을 때, 즉 검색으로 인한 페이지 이동이 있을 때
             var query = window.location.search.replace("?", "");    // ? 이후의 값을 query에 담는데 ?를 공백으로 대체해서 저장
                                                                     // ex) 검색창에 2를 검색했을 때 keyword=2&page=0&row=10
             query = query.split("&");
             query.forEach(function (one, i) {                      // 매개변수를 받아서 for문을 돌려주는 forEach
 
-                console.log(one.indexOf("page="));                  //
-                if(one.indexOf("page=") > -1){
-                    query.splice(i, 1);
+
+                console.log(one.indexOf("page="));                // indexOf로 문자열 검색 시 문자열이 발견되지 않을 경우에는 -1 반환
+                //alert(one.indexOf("page="));
+                if(one.indexOf("page=") > -1){                      // query[i] 배열에서 page= 가 검색 됐을 경우
+                    query.splice(i, 1);                             // query 배열(i)의 1번째 인덱스값을 ""로 바꿔준다 = 삭제
+                                                                    // splice(배열, 인덱스값, 바꿀값), 바꿀값이 공백이라면 삭제 기능
                 }
             })
-            query.push("page=" + pageValue);
-            query = query.join("&");
-            document.location.href = "?"+query;
+            query.push("page=" + pageValue);                        // 배열의 맨 마지막 요소에 "page="+pageValue를 추가
+            //console.log(query);
+            query = query.join("&");                                // 각 배열 요소를 &으로 연결하여 하나의 문자열 생성
+            document.location.href = "?"+query;                     // 해당 문자열로 만들어진 주소로 페이지 이동
         }else{
-            document.location.href = "?page="+pageValue;
+            document.location.href = "?page="+pageValue;            // 파라미터 값이 없다면 다음 페이지값 주소로 이동
         }
     }
 </script>

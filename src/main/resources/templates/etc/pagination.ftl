@@ -84,7 +84,7 @@
 <#macro last>
     <#if (data.pagesAvailable > 0)>
         <#if (data.pageNumber >= data.pagesAvailable - 1)>
-            <#local classAttr = "class=\"disabled\"" />
+            <#local classAttr = "class=\"disabled\"" />         <#-- 로컬 변수 선언하는 #local -->
         <#else>
             <#local classAttr = "" />
         </#if>
@@ -182,7 +182,7 @@
     <#if (attributes != "" && attributes?starts_with(" ") == false)>
         <#local attributes = " " + attributes />
     </#if>
-    <#--<li ${attributes}><a href="?page=${pageNumber}<#if RequestParameters.sub?exists>&sub=${RequestParameters.sub}</#if><#if RequestParameters.slug?exists>&slug=${RequestParameters.slug}</#if>">${text?html}</a></li>-->
+<#--<li ${attributes}><a href="?page=${pageNumber}<#if RequestParameters.sub?exists>&sub=${RequestParameters.sub}</#if><#if RequestParameters.slug?exists>&slug=${RequestParameters.slug}</#if>">${text?html}</a></li>-->
     <li ${attributes}><a href="javascript:paging(${pageNumber});">${text?html}</a></li>
 </#macro>
 
@@ -251,5 +251,5 @@
     <#if (attributes != "" && attributes?starts_with(" ") == false)>
         <#local attributes = " " + attributes />
     </#if>
-<a href="?field=${field?url}&amp;page=${data.pageNumber}&amp;size=${data.pageSize}&amp;direction=${direction?url}"${attributes}>${text?html}</a>
+    <a href="?field=${field?url}&amp;page=${data.pageNumber}&amp;size=${data.pageSize}&amp;direction=${direction?url}"${attributes}>${text?html}</a>
 </#macro>

@@ -3,28 +3,28 @@ body{
     margin: 0px;
 }
 
-ul{
+.navi{
     list-style-type: none;
     background-color: black;
     margin: 0px;
     overflow: hidden;
 }
 
-li{
+.navi li{
     float: left;
-    color: white;
+    color : white;
 }
 
-li a{
+.navi li a{
     text-decoration: none;
     display: inline-block;
     padding: 10px 15px;
 }
 
-a:link, a:visited{
+.navi a:link, .navi a:visited{
     color: white;
 }
 
-li a:hover{
+. navi li a:hover{
     background-color: lightgray;
 }

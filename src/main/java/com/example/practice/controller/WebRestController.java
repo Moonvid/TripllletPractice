@@ -59,40 +59,35 @@ public class WebRestController{
                                @RequestParam(value="row", defaultValue = "10") Integer row,
                                ModelAndView mav){
 
-
-        List<Posts> postsList = postsService.searchPosts(keyword);  // 검색어 유무에 따른 게시글 리스트를 받아옴
-
-        // 페이징에 쓰기위한 Map params 생성
+        // 페이징에 쓰기위한 Map params 값 생성
         Map<String, Object> params = new HashMap<String, Object>(){{
-           put("keyword", keyword);
-           put("sort", "created_datetime");
-           put("order", 1);
-           put("offset", page * row);
-           put("count", row);
+            put("keyword", keyword);
+            put("sort", "created_Date");
+            put("order", 1);
+            put("offset", page * row);
+            put("count", row);
         }};
+        System.out.println("params = " + params);
+
+
+        List<Posts> postsList = postsService.searchPosts(params);  // 검색어 유무에 따른 게시글 리스트를 받아옴
+
+
 
         int totalCount = postsService.count(params);
+        System.out.println("totalCount = " + totalCount);
 
         setPaginationData(mav,totalCount,page, row);
+
+        if(params.get(keyword) != null){
+            mav.addObject("searchKeyword",params.get(keyword));
+        }
 
         mav.addObject("postsList", postsList);
         mav.setViewName("/post/list");
 
         return mav;
     }
-
-    // 페이징 참고
-    protected void setPaginationData(ModelAndView mav, long totalCount, int pageNumber, int pageSize) {
-
-        Map<String, Object> paginationData = new HashMap<>();
-        paginationData.put("pagesAvailable", (int) Math.ceil((double) totalCount / pageSize));
-        paginationData.put("pageNumber", pageNumber);
-        paginationData.put("pageSize", pageSize);
-
-        mav.addObject("paginationData", paginationData);
-        mav.addObject("totalCount", totalCount);
-    }
-
 
     // 글쓰기 폼 이동
     @GetMapping("/post/insertForm")
@@ -173,6 +168,21 @@ public class WebRestController{
         return mav;
 
     }
+
+
+    // 페이징 참고
+    protected void setPaginationData(ModelAndView mav, long totalCount, int pageNumber, int pageSize) {
+
+        Map<String, Object> paginationData = new HashMap<>();
+        paginationData.put("pagesAvailable", (int) Math.ceil((double) totalCount / pageSize));
+        paginationData.put("pageNumber", pageNumber);
+        paginationData.put("pageSize", pageSize);
+
+        mav.addObject("paginationData", paginationData);
+        mav.addObject("totalCount", totalCount);
+    }
+
+
 
 
 }

@@ -20,22 +20,26 @@ public class PostsService {
     private SearchDao searchDao;
 
     // 메인 페이지 검색
-    public List searchPosts(String keyword){
+    public List searchPosts(Map<String, Object> params){
 
         searchDao = sqlSessionTemplate.getMapper(SearchDao.class);
 
-        List<Posts> results = searchDao.searchPosts(keyword);
+        List<Posts> results = searchDao.searchPosts(params);
 
         return results;
 
     }
 
+    // 페이징 할 게시물 카운트
     public int count(Map<String, Object> params){
-        //searchDao = sqlSessionTemplate.getMapper(SearchDao.class);
 
-        //int resultCnt = searchDao.count(params);
+        System.out.println("params = " + params);
 
-        return 0;
+        searchDao = sqlSessionTemplate.getMapper(SearchDao.class);
+
+        int resultCnt = searchDao.count(params);
+
+        return resultCnt;
 
     }
 

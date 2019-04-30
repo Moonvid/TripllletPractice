@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.republiq.mapper.NoticeMapper">
+
+    <resultMap id="noticeResultMap" type="com.republiq.model.Notice">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="authorId" column="author_id"/>
+        <result property="createDatetime" column="create_datetime"/>
+        <result property="updateDatetime" column="update_datetime"/>
+        <result property="deleteDatetime" column="delete_datetime"/>
+        <result property="expose" column="expose"/>
+        <result property="content" column="content"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateName" column="updateName"/>
+        <result property="authorName" column="authorName"/>
+    </resultMap>
+
+    <resultMap id="summaryMap" type="java.util.HashMap">
+        <result property="total" column="total"/>
+        <result property="expose" column="expose"/>
+        <result property="unexpose" column="unexpose"/>
+    </resultMap>
+
+    <resultMap id="noticeFileMap" type="com.republiq.model.NoticeAttachedFile">
+        <id property="id" column="id"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="createDatetime" column="create_datetime"/>
+        <result property="deleteDatetime" column="delete_datetime"/>
+        <result property="originalFileName" column="original_file_name"/>
+        <result property="fileSize" column="file_size"/>
+    </resultMap>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        LEFT JOIN user u2  on u2.id = n.update_id
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchOpt == 0">
+                        n.title LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchOpt == 1">
+                        n.content LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchOpt == 2">
+                        CONCAT(IFNULL(n.title, ''), IFNULL(n.content, '')) LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+            AND n.create_datetime <![CDATA[ >= ]]> #{startDate}
+            AND n.create_datetime <![CDATA[ < ]]> #{endDate}
+            AND n.delete_datetime is null
+            <if test="expose != null">
+                AND n.expose = #{expose}
+            </if>
+            <if test="authorCompanyId != null">
+                AND u.partner_company_id = #{authorCompanyId}
+            </if>
+        </trim>
+    </select>
+
+    <select id="searchNotice" parameterType="map" resultMap="noticeResultMap">
+        SELECT n.* , u.alias AS authorName, u2.alias AS updateName
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        LEFT JOIN user u2  on u2.id = n.update_id
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchOpt == 0">
+                        n.title LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchOpt == 1">
+                        n.content LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchOpt == 2">
+                        CONCAT(IFNULL(n.title, ''), IFNULL(n.content, '')) LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+            AND n.create_datetime <![CDATA[ >= ]]> #{startDate}
+            AND n.create_datetime <![CDATA[ < ]]> #{endDate}
+            AND n.delete_datetime is null
+            <if test="expose != null">
+                AND n.expose = #{expose}
+            </if>
+            <if test="authorCompanyId != null">
+                AND u.partner_company_id = #{authorCompanyId}
+            </if>
+        </trim>
+            <choose>
+                <when test="order == 0">
+                    ORDER BY ${sort} ASC
+                </when>
+                <when test="order == 1">
+                    ORDER BY ${sort} DESC
+                </when>
+            </choose>
+            <if test="offset != null and count != null">
+                LIMIT ${offset}, ${count}
+            </if>
+
+    </select>
+
+    <select id="noticeSummary" parameterType="map" resultMap="summaryMap">
+        SELECT
+          count(*) as total
+          ,COALESCE(sum(if(expose = 1,1,0)),0) as expose
+          ,COALESCE(sum(if(expose = 0,1,0)),0) as unexpose
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        LEFT JOIN user u2  on u2.id = n.update_id
+        WHERE n.delete_datetime is null
+        <if test="keyword != null and keyword != ''">
+            <choose>
+                <when test="searchOpt == 0">
+                    AND n.title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchOpt == 1">
+                    AND n.content LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchOpt == 2">
+                    AND CONCAT(IFNULL(n.title, ''), IFNULL(n.content, '')) LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+        AND n.create_datetime <![CDATA[ >= ]]> #{startDate}
+        AND n.create_datetime <![CDATA[ < ]]> #{endDate}
+        <if test="expose != null">
+            AND n.expose = #{expose}
+        </if>
+        <if test="authorCompanyId != null">
+            AND u.partner_company_id = #{authorCompanyId}
+        </if>
+    </select>
+
+    <select id="preNextNotice" parameterType="map" resultMap="noticeResultMap">
+
+        SELECT n.* , u.alias AS authorName
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        WHERE n.id = #{noticeid}
+        AND n.delete_datetime IS NULL
+            UNION ALL (
+            SELECT n.* , u.alias AS authorName
+            FROM notice n
+            LEFT JOIN user u on u.id = n.author_id
+            WHERE n.id <![CDATA[< ]]> #{noticeid}
+            AND n.delete_datetime IS NULL
+            ORDER BY n.id  DESC LIMIT 1 )
+
+            UNION ALL (
+            SELECT n.* , u.alias AS authorName
+            FROM notice n
+            LEFT JOIN user u on u.id = n.author_id
+            WHERE n.id <![CDATA[ > ]]> #{noticeid}
+            AND n.delete_datetime IS NULL
+            ORDER BY n.id  ASC LIMIT 1 )
+
+        ORDER BY id DESC
+
+    </select>
+
+    <select id="preNextNoticeExpose" parameterType="map" resultMap="noticeResultMap">
+
+        SELECT n.* , u.alias AS authorName
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        WHERE n.id = #{noticeid}
+        AND n.delete_datetime IS NULL
+        UNION ALL (
+        SELECT n.* , u.alias AS authorName
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        WHERE n.id <![CDATA[< ]]> #{noticeid}
+        AND n.expose = 1
+        AND n.delete_datetime IS NULL
+        ORDER BY n.update_datetime  DESC, n.create_datetime DESC LIMIT 1 )
+
+        UNION ALL (
+        SELECT n.* , u.alias AS authorName
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        WHERE n.id <![CDATA[ > ]]> #{noticeid}
+        AND n.expose = 1
+        AND n.delete_datetime IS NULL
+        ORDER BY n.update_datetime ASC, n.create_datetime ASC LIMIT 1 )
+
+        ORDER BY id DESC
+
+    </select>
+
+    <select id="findViewNotice" parameterType="map" resultMap="noticeResultMap">
+
+        SELECT n.* , u.alias AS authorName, u2.alias AS updateName
+        FROM notice n
+        LEFT JOIN user u on u.id = n.author_id
+        LEFT JOIN user u2  on u2.id = n.update_id
+        WHERE n.id = #{noticeid}
+    </select>
+
+    <select id="findFileList" parameterType="int" resultMap="noticeFileMap">
+        SELECT *
+        FROM notice_attached_file
+        WHERE delete_datetime IS NULL
+        AND notice_id = #{noticeid}
+    </select>
+
+</mapper>

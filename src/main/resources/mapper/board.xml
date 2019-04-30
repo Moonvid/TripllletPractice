@@ -5,14 +5,33 @@
 
     <!-- 메인 페이지 게시글 검색 쿼리 -->
 
-    <select id="searchPosts" resultType="com.example.practice.domain.Posts" parameterType="String">
+    <select id="searchPosts" resultType="com.example.practice.domain.Posts" parameterType="map">
         select id, content, title, writer, created_date as createdDate, modified_date as modifiedDate, deleted_date as deletedDate
         from posts
-        <if test="value != null and value!=''">
-            where title like CONCAT('%',#{value},'%')
-        </if>
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="keyword != null and keyword !=''">
+                title like CONCAT('%',#{keyword},'%')
+            </if>
+            and deleted_date is null
+        </trim>
         order by id desc, created_date desc
+        <if test="offset !=null and count !=null">
+            LIMIT ${offset}, ${count}
+        </if>
     </select>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM posts p
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="keyword != null and keyword != ''">
+                title like CONCAT('%',#{keyword},'%')
+            </if>
+            and deleted_date is null
+        </trim>
+    </select>
+
+
 
 
 

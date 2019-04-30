@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 
+<#import "../etc/pagination.ftl" as pagination />
 
 <html>
 <head>
@@ -35,10 +36,10 @@
     <hr/>
     <div>
         <ul class="navi">
-            <li>
+            <li class="navi-menu">
                 <a href="/">Home</a>
             </li>
-            <li>
+            <li class="navi-menu">
                 <a href="/post/list">Board</a>
             </li>
         </ul>
@@ -80,24 +81,36 @@
                 </#list>
             </tbody>
         </table>
-        <br>
-        <form action="/post/list">
-            <div class="row">
-                <div class="search-align">
-                    <div class="input">
-                        <input type="text" name="keyword" id="keyword"/>
-                    </div>&nbsp;
-                    <div class="button">
-                        <button type="submit" class="btn btn-primary btn-success">검색</button>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="paging_box">
+                <ul class="pagination">
+                    <@pagination.first />
+                    <@pagination.numbers />
+                    <@pagination.last />
+                </ul>
             </div>
-        </form>
+        </div>
+        <br>
     <#else>
         <div>
             <h4 class="all"> 등록된 게시글이 없습니다.</h4>
         </div>
     </#if>
+    <form action="/post/list">
+        <div class="row">
+            <div class="search-align">
+                <div class="input">
+                    <input type="text" name="keyword" id="keyword" value="<#if RequestParameters.keyword?exists>${RequestParameters.keyword}</#if>"/>
+                </div>&nbsp;
+                <input type="hidden" id="page" name="page" value="<#if RequestParameters.page?exists>${RequestParameters.page}<#else>0</#if>" />
+                <input type="hidden" id="row" name="row" value="10" />
+                <div class="button">
+                    <button type="submit" class="btn btn-primary btn-success">검색</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
 </div>
 
 
@@ -142,6 +155,29 @@
 <script src='//unpkg.com/jquery@3/dist/jquery.min.js'></script>
 <script src='//unpkg.com/popper.js@1/dist/umd/popper.min.js'></script>
 <script src='//unpkg.com/bootstrap@4/dist/js/bootstrap.min.js'></script>
+
+
+<script>
+    function paging(pageValue){
+        if(window.location.search !=""){                            // 해당 페이지의 파라미터 값이 있을 때
+            var query = window.location.search.replace("?", "");    // ? 이후의 값을 query에 담는데 ?를 공백으로 대체해서 저장
+                                                                    // ex) 검색창에 2를 검색했을 때 keyword=2&page=0&row=10
+            query = query.split("&");
+            query.forEach(function (one, i) {                      // 매개변수를 받아서 for문을 돌려주는 forEach
+
+                console.log(one.indexOf("page="));                  //
+                if(one.indexOf("page=") > -1){
+                    query.splice(i, 1);
+                }
+            })
+            query.push("page=" + pageValue);
+            query = query.join("&");
+            document.location.href = "?"+query;
+        }else{
+            document.location.href = "?page="+pageValue;
+        }
+    }
+</script>
 
 
 </body>

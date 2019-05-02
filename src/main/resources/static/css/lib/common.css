@@ -25,6 +25,54 @@ body{
     color: white;
 }
 
-. navi li a:hover{
+.navi li a:hover{
     background-color: lightgray;
+}
+
+.over-table{
+    text-align: center;
+}
+
+.insert-button{
+    float: left;
+}
+
+.search-align {
+    float: right;
+}
+
+.over-table-center{
+    margin: 0 auto;
+    width: 100px;
+}
+
+.search-input{
+}
+
+.search-button{
+    vertical-align: bottom;
+}
+
+.search-input-button{
+}
+
+.paging-align{
+    margin: auto;
+}
+
+.i-menu{
+    font-weight: bold;
+}
+
+.insert-align{
+    margin: auto;
+}
+
+.table-size{
+    width: 850px;
+    margin: auto;
+}
+
+.view-button-align{
+    margin-left: 55px;
 }

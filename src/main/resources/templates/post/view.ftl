@@ -56,38 +56,35 @@
         <br/>
 
         <div class="row">
-        <table class="table table-horizontal table-bordered">
-            <tbody id="tbody">
-                <tr>
-                    <td class="left">게시글번호</td><td>${posts.id}</td>
-                    <td class="left">작성자</td><td>${posts.writer}</td>
-                </tr>
-                <tr>
-                    <td class="left">최근수정일</td><td colspan="3">${posts.modifiedDate}</td>
-                </tr>
-                <tr>
-                    <td class="left">제목</td><td colspan="3">${posts.title}</td>
-                </tr>
-                <tr>
-                    <td class="left content-title">글내용</td><td colspan="3">${posts.content}</td>
-                </tr>
-            </tbody>
-        </table>
-            <div class="row">
-            <div class="button-align">
-                <div class="button">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/post/updateForm/${posts.id}'">수정하기</button>
-                </div>&nbsp;
-                <div class="button">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/post/delete/${posts.id}'">삭제하기</button>
-                </div>&nbsp;
-                <div class="button">
-                    <button type="button" class="btn btn-primary" onclick="location.href='/post/list'">목록보기</button>
-                </div>
-            </div>
+            <table class="table table-horizontal table-bordered table-size">
+                <tbody id="tbody">
+                    <tr>
+                        <td class="left">게시글번호</td><td class="text-center" width="210px">${posts.id}</td>
+                        <td class="left">작성자</td><td class="text-center">${posts.writer}</td>
+                    </tr>
+                    <tr>
+                        <td class="left">최근수정일</td><td colspan="3">${posts.modifiedDate}</td>
+                    </tr>
+                    <tr>
+                        <td class="left">제목</td><td colspan="3">${posts.title}</td>
+                    </tr>
+                    <tr>
+                        <td class="left content-title">글내용</td><td colspan="3">${posts.content}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="view-button-align">
+                <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/updateForm/${posts.id}'">수정하기</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/delete/${posts.id}'">삭제하기</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-primary btn-success btn-sm" onclick="location.href='/post/list'">목록보기</button>
             </div>
         </div>
-    </div>
 
 
 

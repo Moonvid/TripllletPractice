@@ -57,9 +57,37 @@
         <div align="center"><h1>게시물 수정</h1></div>
         <br/>
 
+        <div class="insert-align">
+            <div class="container" id="main">
+                <div>
+                    <div class="panel panel-default content-main">
+                        <form name="insert" method="post" action="/post/update/${posts.id}">
+                            <input type="hidden" id="id" name="id" value="${posts.id}">
+                            <div class="form-group">
+                                <label for="writer" class="i-menu">작성자</label>
+                                <input type="text" class="form-control" id="writer" name="writer" value="${posts.writer}"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="i-menu">제목</label>
+                                <input type="text" class="form-control" id="title" name="title" value="${posts.title}"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="content" class="i-menu">내용</label>
+                                <textarea name="content" id="content" row="5" class="form-control">${posts.content}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm clearfix pull-right">수정완료</button>
+                            <button type="button" class="btn btn-success btn-sm clearfix pull-right" onclick="location.href='/post/view/${posts.id}'">수정취소</button>
+                            <div class="clearfix"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--
         <div class="row">
             <div class="row">
-                <form method="post" action="/post/update/${posts.id}">
+                <form method="post" action="/post/update/">
                 <table class="table table-horizontal table-bordered">
                     <tbody id="tbody">
                         <tr>
@@ -88,6 +116,7 @@
             </div>
             <br/>
         </div>
+        -->
     </div>
 
 

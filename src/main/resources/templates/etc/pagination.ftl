@@ -183,7 +183,7 @@
         <#local attributes = " " + attributes />
     </#if>
 <#--<li ${attributes}><a href="?page=${pageNumber}<#if RequestParameters.sub?exists>&sub=${RequestParameters.sub}</#if><#if RequestParameters.slug?exists>&slug=${RequestParameters.slug}</#if>">${text?html}</a></li>-->
-    <li ${attributes}><a href="javascript:paging(${pageNumber});">${text?html}</a></li>
+    <li ${attributes}><a href="javascript:paging(${pageNumber});">${text?html}</a></li>&nbsp;
 </#macro>
 
 

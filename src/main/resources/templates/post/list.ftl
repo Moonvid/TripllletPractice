@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="//unpkg.com/bootstrap@4/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/lib/common.css">
 
-    <style>
+    <style type="text/css">
         .t-title{
             text-align: center;
             font-weight: bold;
@@ -21,95 +21,110 @@
         }
 
         .t-number{
-            width: 200px;
+            width: 60px;
         }
 
-        .all{
-            text-align: center;
+        .t-name{
+            width: 170px;
         }
+
+        .t-writer{
+            width: 100px;
+
+        .t-date{
+            width: 120px;
+        }
+
     </style>
 
 </head>
 
 <body>
 
-    <hr/>
-    <div>
-        <ul class="navi">
-            <li class="navi-menu">
-                <a href="/">Home</a>
-            </li>
-            <li class="navi-menu">
-                <a href="/post/list">Board</a>
-            </li>
-        </ul>
-    </div>
-    <hr/>
+<hr/>
+<div>
+    <ul class="navi">
+        <li class="navi-menu">
+            <a href="/">Home</a>
+        </li>
+        <li class="navi-menu">
+            <a href="/post/list">Board</a>
+        </li>
+    </ul>
+</div>
+<hr/>
 
-    <br/><br/>
+<br/><br/>
 
 <div class="container">
     <div align="center"><h1>게시물 리스트</h1></div>
     <br/>
 
-    <div class="col-md-12">
-        <button type="button" class="btn btn-primary" data-toggle="modal" onclick="location.href='/post/insertForm'" >글 등록</button>
+    <div class="row over-table">
+        <div class="insert-button">
+            <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/insertForm'" >글 등록</button>
+        </div>
+
+        <div class="over-table-center">
+        </div>
+
+
+        <div class="search-align">
+            <form action="/post/list" id="frmSearch">
+                <input type="hidden" id="page" name="page" value="<#if RequestParameters.page?exists>${RequestParameters.page}<#else>0</#if>" />
+                <input type="hidden" id="row" name="row" value="10" />
+                <div class="search-input-button">
+                    <input type="text" name="keyword" id="keyword" class="search-input" value="<#if RequestParameters.keyword?exists>${RequestParameters.keyword}</#if>"/>
+                    <button type="submit" class="btn btn-primary btn-success btn-sm search-button">검색</button>
+                </div>
+            </form>
+        </div>
+
+
     </div>
 
-    <br/>
     <br/>
 
     <!-- 목록 출력 영역 -->
     <#if postsList?has_content>
-        <table class="table table-horizontal table-bordered">
-            <thead class="thead-strong">
-            <tr>
-                <th class="t-title t-number">게시글번호</th>
-                <th class="t-title">제목</th>
-                <th class="t-title">작성자</th>
-                <th class="t-title">최근수정일</th>
-            </tr>
-            </thead>
-            <tbody id="tbody">
+        <div class="row">
+            <table class="table table-horizontal table-bordered text-center">
+                <thead class="thead-strong">
+                <tr>
+                    <th class="t-title t-number">게시글번호</th>
+                    <th class="t-title t-name">제목</th>
+                    <th class="t-title t-writer">작성자</th>
+                    <th class="t-title t-date">최근수정일</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
                 <#list postsList as item>
-                    <tr onclick="location.href='/post/view/${item.id}'" class="all">
-                        <td>${item.id}</td>
+                    <tr onclick="location.href='/post/view/${item.id}'">
+                        <td text-align="center">${item.id}</td>
                         <td>${item.title}</td>
                         <td>${item.writer}</td>
                         <td>${item.modifiedDate?string['YYYY-MM-dd']}</td>
                     </tr>
                 </#list>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
         <div class="row">
-            <div class="paging_box">
+            <div class="paging_box paging-align">
                 <ul class="pagination">
-                    <@pagination.first />
-                    <@pagination.numbers />
+                    <@pagination.first />&nbsp;
+                    <@pagination.numbers />&nbsp;
                     <@pagination.last />
                 </ul>
             </div>
         </div>
-        <br>
     <#else>
+        <br/><br/>
         <div>
-            <h4 class="all"> 등록된 게시글이 없습니다.</h4>
+            <h4 class="all" align="center">"<#if RequestParameters.keyword?exists>${RequestParameters.keyword}</#if>"에 대한 검색결과를 찾을 수 없습니다</h4>
         </div>
     </#if>
-    <form action="/post/list" id="frmSearch">
-        <div class="row">
-            <div class="search-align">
-                <div class="input">
-                    <input type="text" name="keyword" id="keyword" value="<#if RequestParameters.keyword?exists>${RequestParameters.keyword}</#if>"/>
-                </div>&nbsp;
-                <input type="hidden" id="page" name="page" value="<#if RequestParameters.page?exists>${RequestParameters.page}<#else>0</#if>" />
-                <input type="hidden" id="row" name="row" value="10" />
-                <div class="button">
-                    <button type="submit" class="btn btn-primary btn-success">검색</button>
-                </div>
-            </div>
-        </div>
-    </form>
 
 </div>
 
@@ -169,7 +184,7 @@
 
     });
 
-
+    // 페이징 function
     function paging(pageValue){
         if(window.location.search !=""){                            // 해당 페이지의 파라미터 값이 있을 때, 즉 검색으로 인한 페이지 이동이 있을 때
             var query = window.location.search.replace("?", "");    // ? 이후의 값을 query에 담는데 ?를 공백으로 대체해서 저장

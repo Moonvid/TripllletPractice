@@ -54,28 +54,31 @@
     <!-- 게시물 작성 -->
     <div align="center"><h1>게시물 작성</h1></div>
     <br/>
+
+    <div class="insert-align">
     <div class="container" id="main">
-        <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+        <div>
             <div class="panel panel-default content-main">
                 <form name="insert" method="post" action="/post/insert">
                     <div class="form-group">
-                        <label for="writer">작성자</label>
-                        <input type="text" class="form-control" id="writer" name="writer"/>
+                        <label for="writer" class="i-menu">작성자</label>
+                        <input type="text" class="form-control" id="writer" name="writer" placeholder="이름을 입력하세요"/>
                     </div>
                     <div class="form-group">
-                        <label for="title">제목</label>
+                        <label for="title" class="i-menu">제목</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요"/>
                     </div>
                     <div class="form-group">
-                        <label for="content">내용</label>
+                        <label for="content" class="i-menu">내용</label>
                         <textarea name="content" id="content" row="5" class="form-control" placeholder="내용을 입력하세요"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-success clearfix pull-right">작성하기</button>
-                    <button type="button" class="btn btn-success clearfix pull-right" onclick="location.href='/post/list'">목록보기</button>
+                    <button type="submit" class="btn btn-success btn-sm clearfix pull-right">작성하기</button>
+                    <button type="button" class="btn btn-success btn-sm clearfix pull-right" onclick="location.href='/post/list'">목록보기</button>
                     <div class="clearfix"/>
                 </form>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

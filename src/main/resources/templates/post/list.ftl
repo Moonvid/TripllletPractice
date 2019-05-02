@@ -20,6 +20,10 @@
             width: 150px;
         }
 
+        .t-check{
+            width: 10px;
+        }
+
         .t-number{
             width: 60px;
         }
@@ -62,12 +66,12 @@
 
     <div class="row over-table">
         <div class="insert-button">
-            <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/insertForm'" >글 등록</button>
+            <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/insertForm'" >작성하기</button>&nbsp;
+            <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href=''" >삭제하기</button>
         </div>
 
         <div class="over-table-center">
         </div>
-
 
         <div class="search-align">
             <form action="/post/list" id="frmSearch">
@@ -91,6 +95,7 @@
             <table class="table table-horizontal table-bordered text-center">
                 <thead class="thead-strong">
                 <tr>
+                    <th class="t-title t-check"><input type="checkbox" id="checkAll" name="checkAll" checked=""></th>
                     <th class="t-title t-number">게시글번호</th>
                     <th class="t-title t-name">제목</th>
                     <th class="t-title t-writer">작성자</th>
@@ -99,11 +104,12 @@
                 </thead>
                 <tbody id="tbody">
                 <#list postsList as item>
-                    <tr onclick="location.href='/post/view/${item.id}'">
-                        <td text-align="center">${item.id}</td>
-                        <td>${item.title}</td>
-                        <td>${item.writer}</td>
-                        <td>${item.modifiedDate?string['YYYY-MM-dd']}</td>
+                    <tr>
+                        <td><input type="checkbox" id="checkOne" name="checkOne"></td>
+                        <td onclick="location.href='/post/view/${item.id}'">${item.id}</td>
+                        <td onclick="location.href='/post/view/${item.id}'">${item.title}</td>
+                        <td onclick="location.href='/post/view/${item.id}'">${item.writer}</td>
+                        <td onclick="location.href='/post/view/${item.id}'">${item.modifiedDate?string['YYYY-MM-dd']}</td>
                     </tr>
                 </#list>
                 </tbody>
@@ -181,7 +187,6 @@
             $("#page").val(0);
 
         });
-
     });
 
     // 페이징 function
@@ -208,6 +213,8 @@
             document.location.href = "?page="+pageValue;            // 파라미터 값이 없다면 다음 페이지값 주소로 이동
         }
     }
+
+
 </script>
 
 

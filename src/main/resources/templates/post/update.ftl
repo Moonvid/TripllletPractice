@@ -61,7 +61,7 @@
             <div class="container" id="main">
                 <div>
                     <div class="panel panel-default content-main">
-                        <form name="insert" method="post" action="/post/update/${posts.id}">
+                        <form name="update" id="update" method="post" action="/post/update/${posts.id}">
                             <input type="hidden" id="id" name="id" value="${posts.id}">
                             <div class="form-group">
                                 <label for="writer" class="i-menu">작성자</label>
@@ -75,7 +75,7 @@
                                 <label for="content" class="i-menu">내용</label>
                                 <textarea name="content" id="content" row="5" class="form-control">${posts.content}</textarea>
                             </div>
-                            <button type="submit" class="btn btn-success btn-sm clearfix pull-right">수정완료</button>
+                            <button type="button" class="btn btn-success btn-sm clearfix pull-right" onclick="ajaxUpdate(${posts.id})">수정완료</button>
                             <button type="button" class="btn btn-success btn-sm clearfix pull-right" onclick="location.href='/post/view/${posts.id}'">수정취소</button>
                             <div class="clearfix"/>
                         </form>
@@ -119,6 +119,35 @@
         -->
     </div>
 
+
+    <script type="text/javascript">
+        function ajaxUpdate(id){
+
+            var idValue = id;
+
+            $.ajax({
+                type: 'POST',
+                async: false,
+                url: '/post/ajaxUpdate/'+idValue,
+                data: $("#update").serialize(),
+                dataType: 'json',
+                success: function(data){
+                    if(data.check !== "false"){
+                        alert("수정되었습니다.");
+                        location.replace("/post/view/"+idValue);
+                    }else{
+                        alert("수정에 실패하였습니다. 입력 값을 확인하세요.")
+                    }
+                },
+                error:function (request, status, error) {
+                    console.log('code : ' + request.status + "\n" + 'message : ' + request.responseText + "\n" + "error : " + error);
+                }
+            });
+
+
+        }
+
+    </script>
 
 
 

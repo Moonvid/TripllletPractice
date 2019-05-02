@@ -50,6 +50,8 @@
     </div>
     <hr/>
 
+    <br/><br/>
+
     <div class="container">
         <!-- 게시물 확인 -->
         <div align="center"><h1>게시물 확인</h1></div>
@@ -80,13 +82,38 @@
             <div class="view-button-align">
                 <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/updateForm/${posts.id}'">수정하기</button>
                 &nbsp;&nbsp;
-                <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="location.href='/post/delete/${posts.id}'">삭제하기</button>
+                <button type="button" class="btn btn-primary btn-success btn-sm" data-toggle="modal" onclick="ajaxDelete(${posts.id})">삭제하기</button>
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-primary btn-success btn-sm" onclick="location.href='/post/list'">목록보기</button>
             </div>
         </div>
 
+<script type="text/javascript">
 
+    function ajaxDelete(id){
+
+        var idValue = id;
+
+        $.ajax({
+            type: 'GET',
+            async: false,
+            url: '/post/ajaxDelete/'+idValue,
+            data: id,
+            dataType: 'json',
+            success: function(data){
+                alert("삭제되었습니다.");
+                location.replace("/post/list");
+            },
+            error:function(request, status, error) {
+                console.log('code : ' + request.status + "\n" + 'message : ' + request.responseText + "\n" + "error : " + error);
+            }
+        });
+    }
+
+
+
+
+</script>
 
 
 
@@ -94,9 +121,6 @@
 <script src='//unpkg.com/jquery@3/dist/jquery.min.js'></script>
 <script src='//unpkg.com/popper.js@1/dist/umd/popper.min.js'></script>
 <script src='//unpkg.com/bootstrap@4/dist/js/bootstrap.min.js'></script>
-
-<!--custom js 추가-->
-<script src="/js/app/main.js"></script>
 
 
 </body>

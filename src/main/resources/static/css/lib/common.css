@@ -60,6 +60,12 @@ body{
     margin: auto;
 }
 
+input[type=checkbox]{
+    vertical-align: bottom;
+    width: 20px;
+    height: 20px;
+}
+
 .i-menu{
     font-weight: bold;
 }
@@ -74,5 +80,5 @@ body{
 }
 
 .view-button-align{
-    margin-left: 55px;
+    margin-left: 145px;
 }

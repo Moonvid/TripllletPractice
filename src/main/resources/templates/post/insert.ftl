@@ -50,6 +50,8 @@
 </div>
 <hr/>
 
+<br/><br/>
+
 <div class="container">
     <!-- 게시물 작성 -->
     <div align="center"><h1>게시물 작성</h1></div>
@@ -59,7 +61,7 @@
     <div class="container" id="main">
         <div>
             <div class="panel panel-default content-main">
-                <form name="insert" method="post" action="/post/insert">
+                <form name="insert" id="insert" method="post" action="/post/insert">
                     <div class="form-group">
                         <label for="writer" class="i-menu">작성자</label>
                         <input type="text" class="form-control" id="writer" name="writer" placeholder="이름을 입력하세요"/>
@@ -72,7 +74,7 @@
                         <label for="content" class="i-menu">내용</label>
                         <textarea name="content" id="content" row="5" class="form-control" placeholder="내용을 입력하세요"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-success btn-sm clearfix pull-right">작성하기</button>
+                    <button type="button" class="btn btn-success btn-sm clearfix pull-right" onclick="ajaxInsert()">작성하기</button>
                     <button type="button" class="btn btn-success btn-sm clearfix pull-right" onclick="location.href='/post/list'">목록보기</button>
                     <div class="clearfix"/>
                 </form>
@@ -116,6 +118,35 @@
     </div>
     -->
 </div>
+
+<script type="text/javascript">
+    function ajaxInsert(){
+        $.ajax({
+            type: 'POST',
+            async: false,
+            url: '/post/ajaxInsert',
+            data: $("#insert").serialize(),
+            dataType: "json",
+            success: function(data){
+                //console.log(data)
+                if(data.check !== "false"){
+                    alert("작성되었습니다.");
+                    location.replace("/post/list");
+                }else{
+                    alert("작성에 실패하였습니다. 입력 값을 확인하세요.");
+                }
+            },
+            error:function(request, status, error) {
+                console.log('code : ' + request.status + "\n" + 'message : ' + request.responseText + "\n" + "error : " + error);
+            }
+        });
+    }
+
+    function clickTest(){
+        console.log($("#insert").serialize());
+    }
+
+</script>
 
 
 

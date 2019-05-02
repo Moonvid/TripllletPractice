@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -99,19 +100,55 @@ public class WebRestController{
         return mav;
     }
 
-    // 글쓰기
+    // form submit을 이용한 글쓰기
     @PostMapping("/post/insert")
     public ModelAndView insert(Posts p, ModelAndView mav){
 
-        System.out.println(p.getCreatedDate());
-        System.out.println(p.getModifiedDate());
-
+        System.out.println("p = " + p);
         Posts posts = postsRepository.save(p);
 
         mav.addObject("posts",postsRepository.findAll());
         mav.setViewName("redirect:/post/list");
 
         return mav;
+    }
+
+    // ajax 통신을 이용한 글쓰기
+    @PostMapping("/post/ajaxInsert")
+    public Object ajaxInsert(Posts p){
+
+        System.out.println(p);
+
+        Map<String, Object> ajaxResult = new HashMap<String, Object>();
+
+        ajaxResult.put("id", p.getId());
+        ajaxResult.put("writer", p.getWriter());
+        ajaxResult.put("title", p.getTitle());
+        ajaxResult.put("content", p.getContent());
+        ajaxResult.put("createdDate", p.getCreatedDate());
+        ajaxResult.put("modifiedDate", p.getModifiedDate());
+        ajaxResult.put("deletedDate", p.getDeletedDate());
+        ajaxResult.put("check", "true");
+
+        try{
+            postsRepository.save(p);
+        } catch (Exception e){
+            ajaxResult.put("check", "false");
+            e.printStackTrace();;
+            throw e;
+        } finally {
+        }
+
+        // 입력 성공,실패 관련하여 postsRepository.save(p); 부분을
+        // try catch로 확인 후
+        // put으로 "check", true 또는 false 값을 넣어준뒤
+        // map을 리턴해준뒤 success에서 매개변수.check == true, false로
+        // 입력 성공 실패 확인 후 alert 띄어줄 수 도 있음.
+
+//        mav.addObject("posts",ajaxResult);
+//        mav.setViewName("redirect:/post/list");
+
+        return ajaxResult;
     }
 
     // 글 보기
@@ -126,6 +163,26 @@ public class WebRestController{
         return mav;
     }
 
+    // ajax로 글 읽기는.. spinner 효과를 쓸려고 하는게 아닌 이상 큰 메리트가 없음.
+    // 우선 보류하고 나중에 댓글 처리 할때 다시 하기
+    @GetMapping("/post/ajaxView/{id}")
+    public Object ajaxView(@PathVariable("id") Long id, ModelAndView mav){
+
+
+        Posts p = postsRepository.getOne(id);
+
+        Map<String, Object> ajaxResult = new HashMap<String, Object>();
+
+        ajaxResult.put("id", p.getId());
+        ajaxResult.put("writer", p.getWriter());
+        ajaxResult.put("title", p.getTitle());
+        ajaxResult.put("content", p.getContent());
+        ajaxResult.put("createdDate", p.getCreatedDate());
+        ajaxResult.put("modifiedDate", p.getModifiedDate());
+        ajaxResult.put("deletedDate", p.getDeletedDate());
+
+        return ajaxResult;
+    }
 
     // 삭제
     @GetMapping("/post/delete/{id}")
@@ -138,6 +195,28 @@ public class WebRestController{
         mav.setViewName("redirect:/post/list");
 
         return mav;
+
+    }
+
+    // ajax 삭제
+    @GetMapping("/post/ajaxDelete/{id}")
+    public Object ajaxDelete(Posts posts){
+
+        Posts p = postsRepository.getOne(posts.getId());
+        p.setDeletedDate(new Date());
+        postsRepository.save(p);
+
+        HashMap<String, Object> ajaxResult = new HashMap<>();
+
+        ajaxResult.put("id", p.getId());
+        ajaxResult.put("writer", p.getWriter());
+        ajaxResult.put("title", p.getTitle());
+        ajaxResult.put("content", p.getContent());
+        ajaxResult.put("createdDate", p.getCreatedDate());
+        ajaxResult.put("modifiedDate", p.getModifiedDate());
+        ajaxResult.put("deletedDate", p.getDeletedDate());
+
+        return ajaxResult;
 
     }
 
@@ -169,6 +248,39 @@ public class WebRestController{
 
         return mav;
 
+    }
+
+    // ajax 업데이트
+    @PostMapping("/post/ajaxUpdate/{id}")
+    public Object ajaxUpdate(Posts posts){
+
+        Posts p = postsRepository.getOne(posts.getId());
+
+        p.setWriter(posts.getWriter());
+        p.setTitle(posts.getTitle());
+        p.setContent(posts.getContent());
+
+        HashMap<String, Object> ajaxResult = new HashMap<>();
+        ajaxResult.put("check", "true");
+
+        try{
+            postsRepository.save(p);
+        } catch (Exception e){
+            ajaxResult.put("check", "false");
+            e.printStackTrace();
+            throw e;
+        } finally {
+        }
+
+        ajaxResult.put("id", p.getId());
+        ajaxResult.put("writer", p.getWriter());
+        ajaxResult.put("title", p.getTitle());
+        ajaxResult.put("content", p.getContent());
+        ajaxResult.put("createdDate", p.getCreatedDate());
+        ajaxResult.put("modifiedDate", p.getModifiedDate());
+        ajaxResult.put("deletedDate", p.getDeletedDate());
+
+        return ajaxResult;
     }
 
 
